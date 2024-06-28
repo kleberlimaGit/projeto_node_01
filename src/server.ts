@@ -1,19 +1,12 @@
 import fastify from 'fastify'
-import { knex } from './database'
+import 'dotenv/config'
+import { transactionsRoutes } from './routes/transactions';
 
 const app = fastify()
-
-app.get('/hello', async () => {
-  const estados = await knex
-    .select(knex.ref('id').as('Identificacao'), 'nome')
-    .from('estado')
-  console.log(estados)
-  return 'Hello world'
-})
-
+ app.register(transactionsRoutes)
 app
   .listen({
-    port: 3333,
+    port: Number(process.env.SERVER_PORT),
   })
   .then(() => {
     console.log('HTTP SERVER IS RUNNING!')
